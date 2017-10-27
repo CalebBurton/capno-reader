@@ -18,9 +18,6 @@ class Capno(KaitaiStruct):
         adult = 0
         neonate = 1
 
-    class ReservedEnum(Enum):
-        reserved = 0
-
     class ZeroSilencedEnum(Enum):
         silenced = 0
         audible = 1
@@ -53,9 +50,9 @@ class Capno(KaitaiStruct):
         self._io = _io
         self._parent = _parent
         self._root = _root if _root else self
-        self.every_message = [None] * (10)
-        for i in range(10):
-            self.every_message[i] = self._root.CapnoMsg(self._io, self, self._root)
+        self.every_message = []
+        while not self._io.is_eof():
+            self.every_message.append(self._root.CapnoMsg(self._io, self, self._root))
 
 
     class SlowStatusType(KaitaiStruct):
@@ -63,7 +60,7 @@ class Capno(KaitaiStruct):
             self._io = _io
             self._parent = _parent
             self._root = _root if _root else self
-            self.reserved = self._root.ReservedEnum(self._io.read_bits_int(1))
+            self.reserved = self._io.read_bits_int(1) != 0
             self.pulse_beeps = self._root.ZeroAudibleEnum(self._io.read_bits_int(1))
             self.advisory = self._root.ZeroSilencedEnum(self._io.read_bits_int(1))
             self.low_priority_alarm = self._root.ZeroSilencedEnum(self._io.read_bits_int(1))
@@ -96,7 +93,7 @@ class Capno(KaitaiStruct):
             self._io = _io
             self._parent = _parent
             self._root = _root if _root else self
-            self.reserved = self._root.ReservedEnum(self._io.read_bits_int(1))
+            self.reserved = self._io.read_bits_int(1) != 0
             self.spo2_sensor_disconnected = self._io.read_bits_int(1) != 0
             self.spo2_sensor_off_patient = self._io.read_bits_int(1) != 0
             self.pulse_rate_low = self._io.read_bits_int(1) != 0
@@ -143,7 +140,7 @@ class Capno(KaitaiStruct):
             self._io = _io
             self._parent = _parent
             self._root = _root if _root else self
-            self.reserved = self._root.ReservedEnum(self._io.read_bits_int(4))
+            self.reserved = self._io.read_bits_int(4)
             self.pump_off = self._io.read_bits_int(1) != 0
             self.check_flow = self._io.read_bits_int(1) != 0
             self.check_calibration = self._io.read_bits_int(1) != 0
@@ -172,7 +169,7 @@ class Capno(KaitaiStruct):
             self._io = _io
             self._parent = _parent
             self._root = _root if _root else self
-            self.reserved = self._root.ReservedEnum(self._io.read_bits_int(2))
+            self.reserved = self._io.read_bits_int(2)
             self.fico2_high = self._io.read_bits_int(1) != 0
             self.rr_low = self._io.read_bits_int(1) != 0
             self.rr_high = self._io.read_bits_int(1) != 0
@@ -254,7 +251,7 @@ class Capno(KaitaiStruct):
             self._parent = _parent
             self._root = _root if _root else self
             self.event_number = self._io.read_u1()
-            self.event_description = (self._io.read_bytes(11)).decode(u"ASCII")
+            self.event_description = self._io.read_bytes(11)
 
 
     class LongTrendPatientDataDownloadMsg(KaitaiStruct):
@@ -304,3 +301,6 @@ class Capno(KaitaiStruct):
             self.pulse_rate_alarm_low_limit = self._io.read_u1()
             self.current_capnostream_co2_units = self._root.CapnostreamCo2Enum(self._io.read_u1())
             self.extended_co2_status = self._root.ExtendedCo2Type(self._io, self, self._root)
+
+
+

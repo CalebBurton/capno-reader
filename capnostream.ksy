@@ -8,10 +8,9 @@ doc: |
 seq:
   - id: every_message
     type: capno_msg
-    #size-eos: true
     #repeat: eos
     repeat: expr
-    repeat-expr: 118
+    repeat-expr: 350
 
 types:
   capno_msg:
@@ -122,9 +121,9 @@ types:
       - id: event_number
         type: u1
       - id: event_description
-        type: str
+        #type: str
         size: 11
-        encoding: ASCII
+        #encoding: ASCII
   events_list_unicode_msg:
     seq:
       - id: event_number
@@ -187,7 +186,7 @@ types:
     seq:
       - id: reserved
         type: b1
-        enum: reserved_enum
+        #enum: reserved_enum
       - id: pulse_beeps
         type: b1
         enum: zero_audible_enum
@@ -213,7 +212,7 @@ types:
     seq:
       - id: reserved
         type: b2
-        enum: reserved_enum
+        #enum: reserved_enum
       - id: fico2_high
         type: b1
       - id: rr_low
@@ -230,7 +229,7 @@ types:
     seq:
       - id: reserved
         type: b1
-        enum: reserved_enum
+        #enum: reserved_enum
       - id: spo2_sensor_disconnected
         type: b1
       - id: spo2_sensor_off_patient
@@ -249,7 +248,7 @@ types:
     seq:
       - id: reserved
         type: b4
-        enum: reserved_enum
+        #enum: reserved_enum
       - id: pump_off
         type: b1
       - id: check_flow
@@ -271,12 +270,8 @@ enums:
     57: new_patient_information_download_nonunicode_code
     58: new_patient_information_download_unicode_code
     
-  reserved_enum:
-    0: reserved
-    1: reserved
-    2: reserved
-    3: reserved
-    
+  #reserved_enum:
+  # 0: reserved
     
   zero_silenced_enum:
     0: silenced
