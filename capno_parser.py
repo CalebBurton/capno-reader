@@ -15,19 +15,34 @@
 
 import csv
 from capno_structs import Capno
-#from byte_cleaner import clean_byte
+from byte_cleaner import clean_byte
 
-PATH = "/Users/calebburton/Documents/GitHub/capnoReader/"
-FILEIN = PATH + "capnostream_dirty.bin"
-FILEOUT = PATH + "capnostream_clean.bin"
+PATH = "/Users/calebburton/Desktop/Capnostream Data/"
 
-CSV_OUT = PATH + "capno.csv"
+#-----------------------------------------------------------------------------
+#                File Name                      | No. Messages | Validity
+#-----------------------------------------------------------------------------
+#FILENAME = "FCT_ADULT_170929_134350_B500001504_1"  #     550 (no good)
+#FILENAME = "FCT_ADULT_171002_234909_B541112857_1"  #     136 (no good)
+#FILENAME = "FCT_ADULT_171003_085043_B500001504_1"  #   4,766 (no good)
+#FILENAME = "FCT_ADULT_171004_110830_B500001504_1"  # 271,033 (good at 12,232)
+#FILENAME = "FCT_ADULT_171004_145424_B500001504_1"  # 114,769 (good at 79,850)
+#FILENAME = "FCT_ADULT_171005_103607_B500001504_1"  # 102,614 (good at 88,432)
+#FILENAME = "FCT_ADULT_171005_115824_B500001504_1"  #     183 (no good)
+#FILENAME = "FCT_ADULT_171005_115833_B500001504_1"  #      64 (no good)
+#FILENAME = "FCT_ADULT_171005_115845_B500001504_1"  # 284,498 (good at --,--1)
+#FILENAME = "FTT_ADULT_170929_134316_B500001504_1"  #      36 (no good)
+
+FILEIN = PATH + "dirty bin/" + FILENAME + ".bin"
+FILEOUT = PATH + "clean bin/"  + FILENAME + ".bin"
+
+CSV_OUT = PATH + "csv/CO2_" + FILENAME + ".csv"
 CSV_BYTES = []
 
-print('\nReading file (this may take a moment)...')
+print('\nCleaning file (this may take a moment)...')
+clean_byte(FILEIN, FILEOUT)
 
-#clean_byte(FILEIN, FILEOUT)
-
+print('Reading file (this may take a moment)...')
 C = Capno.from_file(FILEOUT)
 print('File parsed. Total messages found: ', len(C.every_message))
 
